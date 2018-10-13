@@ -1,0 +1,16 @@
+  <div>
+    {{input value=newAuthor placeholder="Enter Authors Name"}}
+    <button {{action 'createAuthor'}}>Create</button>
+  </div>
+
+  <p>Data: {{model.authors.data}}</p>
+  {{log model.authors.data}}
+
+  <ul>
+  {{#each model as |auth|}}
+    <li>{{auth.name}}</li>
+    <img src={{auth.picture}}>
+   {{/each}}
+ </ul>
+
+{{outlet}}
