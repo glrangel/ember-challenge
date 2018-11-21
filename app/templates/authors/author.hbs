@@ -1,0 +1,21 @@
+<div class="flex pure-g">
+  <div class="center pure-u-1">
+    <div class="center pure-u-1">
+        <p class="name-lg">{{model.name}}</p>
+        <img  src={{model.picture}}>
+        <div>
+            <br>
+            <form class="pure-form">
+                {{input value=newName placeholder="Update Authors Name"}}
+                <button class="pure-button"{{action 'updateName' model.id}}>Update Name</button>
+            </form>
+            <br>
+            <form class="pure-form">
+                {{input value=newBook placeholder="Book Title"}}
+                <button class="pure-button"{{action 'updateName' model.id}}>Add Book</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+{{outlet}}

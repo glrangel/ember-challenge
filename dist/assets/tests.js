@@ -17,7 +17,17 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/application.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/application.js should pass ESLint\n\n3:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)');
+    assert.ok(false, 'controllers/application.js should pass ESLint\n\n2:8 - \'Mirage\' is defined but never used. (no-unused-vars)\n2:18 - \'faker\' is defined but never used. (no-unused-vars)\n4:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)');
+  });
+
+  QUnit.test('controllers/authors/author.js', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/authors/author.js should pass ESLint\n\n3:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)\n6:9 - Unexpected console statement. (no-console)\n8:13 - \'author\' is assigned a value but never used. (no-unused-vars)');
+  });
+
+  QUnit.test('controllers/authors/index.js', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n2:8 - \'Mirage\' is defined but never used. (no-unused-vars)\n4:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)');
   });
 
   QUnit.test('models/author.js', function (assert) {
@@ -38,6 +48,16 @@ define('project/tests/app.lint-test', [], function () {
   QUnit.test('routes/application.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/application.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('routes/authors/author.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/authors/author.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('routes/authors/index.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/authors/index.js should pass ESLint\n\n');
   });
 });
 define('project/tests/test-helper', ['project/app', 'project/config/environment', '@ember/test-helpers', 'ember-qunit'], function (_app, _environment, _testHelpers, _emberQunit) {
@@ -75,6 +95,11 @@ define('project/tests/tests.lint-test', [], function () {
   QUnit.test('unit/routes/application-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/application-test.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('unit/routes/author-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/routes/author-test.js should pass ESLint\n\n');
   });
 });
 define('project/tests/unit/adapters/application-test', ['qunit', 'ember-qunit'], function (_qunit, _emberQunit) {
@@ -125,6 +150,18 @@ define('project/tests/unit/routes/application-test', ['qunit', 'ember-qunit'], f
 
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:application');
+      assert.ok(route);
+    });
+  });
+});
+define('project/tests/unit/routes/author-test', ['qunit', 'ember-qunit'], function (_qunit, _emberQunit) {
+  'use strict';
+
+  (0, _qunit.module)('Unit | Route | author', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:author');
       assert.ok(route);
     });
   });

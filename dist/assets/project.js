@@ -43,7 +43,50 @@
     }
   });
 });
-;define('project/controllers/application', ['exports'], function (exports) {
+;define('project/controllers/application', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Controller.extend({
+    // actions: {
+    //   createAuthor() {
+    //     let newAuthor = this.get('newAuthor')
+    //     let newRecord = this.store.createRecord('author', {
+    //       name: newAuthor,
+    //       picture: faker.internet.avatar()
+    //     })
+    //     newRecord.save()
+    // },
+    //   readAuthor(id){
+    //       this.store.findRecord('author', id).then((author) => {
+    //           // alert(author.get('name') + ' ' + author.get('id'))
+    //           console.log(author.get('name') + ' ' + author.get('id'));
+    //       })
+    //   }
+    // }
+  });
+});
+;define('project/controllers/authors/author', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Controller.extend({
+    actions: {
+      updateName(id) {
+        console.log("yes");
+        let newName = this.get('newName');
+        let author = this.store.findRecord('author', id).then(function (auth) {
+          auth.set('name', newName);
+        });
+      }
+    }
+  });
+});
+;define('project/controllers/authors/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -54,7 +97,8 @@
       createAuthor() {
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
-          name: newAuthor
+          name: newAuthor,
+          picture: _emberCliMirage.faker.internet.avatar()
         });
         newRecord.save();
       }
@@ -292,17 +336,20 @@
     value: true
   });
 
-  exports.default = function () {
+  exports.default = function (server) {
 
     // this.urlPrefix = 'http://localhost:4200/';    // make this `http://localhost:8080`, for example, if your API is on a different server
     this.namespace = 'api'; // make this `/api`, for example, if your API is namespaced
     this.get('/authors');
     this.get('/authors/:id');
+    this.post('/authors');
 
-    this.post('/authors', (schema, request) => {
-      const attrs = JSON.parse(request.requestBody).author;
-      return schema.authors.create(attrs);
-    });
+    // this.post('/authors', (schema, request) => {
+    //   const attrs = JSON.parse(request.requestBody).data.attributes;
+    //   console.log(attrs);
+    //   console.log(schema);
+    //   return schema.authors.create(attrs);
+    // });
     /*
       Shorthand cheatsheet:
        this.get('/posts');
@@ -348,6 +395,9 @@
     server.create('author', { name: 'Ernest Hemingway' });
     server.create('author', { name: 'Ernest Hemingway 2' });
     server.create('author', { name: 'Ernest Hemingway 3' });
+    server.create('author', { name: 'Ernest Hemingway 4' });
+    server.create('author', { name: 'Ernest Hemingway 5' });
+    server.create('author', { name: 'Ernest Hemingway 6' });
   };
 });
 ;define('project/mirage/serializers/application', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
@@ -390,7 +440,11 @@
     rootURL: _environment.default.rootURL
   });
 
-  Router.map(function () {});
+  Router.map(function () {
+    this.route('authors', { path: '/authors' }, function () {
+      this.route('author', { path: '/:author_id' });
+    });
+  });
 
   exports.default = Router;
 });
@@ -403,8 +457,31 @@
   exports.default = Ember.Route.extend({
     model() {
       return this.store.findAll('author');
+    },
+    redirect: function () {
+      this.transitionTo('/authors/');
     }
   });
+});
+;define('project/routes/authors/author', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Route.extend({
+    model(params) {
+      return this.store.findRecord('author', params.author_id);
+    }
+  });
+});
+;define('project/routes/authors/index', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Route.extend({});
 });
 ;define('project/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _ajax) {
   'use strict';
@@ -425,7 +502,23 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "LTfvJCRj", "block": "{\"symbols\":[\"auth\"],\"statements\":[[0,\"  \"],[7,\"div\"],[9],[0,\"\\n    \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newAuthor\"]],\"Enter Authors Name\"]]],false],[0,\"\\n    \"],[7,\"button\"],[3,\"action\",[[22,0,[]],\"createAuthor\"]],[9],[0,\"Create\"],[10],[0,\"\\n  \"],[10],[0,\"\\n\\n  \"],[7,\"p\"],[9],[0,\"Data: \"],[1,[23,[\"model\",\"authors\",\"data\"]],false],[10],[0,\"\\n  \"],[1,[27,\"log\",[[23,[\"model\",\"authors\",\"data\"]]],null],false],[0,\"\\n\\n  \"],[7,\"ul\"],[9],[0,\"\\n\"],[4,\"each\",[[23,[\"model\"]]],null,{\"statements\":[[0,\"    \"],[7,\"li\"],[9],[1,[22,1,[\"name\"]],false],[10],[0,\"\\n    \"],[7,\"img\"],[12,\"src\",[22,1,[\"picture\"]]],[9],[10],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\" \"],[10],[0,\"\\n\\n\"],[1,[21,\"outlet\"],false]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/application.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "tROSp4a6", "block": "{\"symbols\":[],\"statements\":[[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/application.hbs" } });
+});
+;define("project/templates/authors/author", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.HTMLBars.template({ "id": "XEGR8sCL", "block": "{\"symbols\":[],\"statements\":[[7,\"div\"],[11,\"class\",\"flex pure-g\"],[9],[0,\"\\n  \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n    \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n        \"],[7,\"p\"],[11,\"class\",\"name-lg\"],[9],[1,[23,[\"model\",\"name\"]],false],[10],[0,\"\\n        \"],[7,\"img\"],[12,\"src\",[23,[\"model\",\"picture\"]]],[9],[10],[0,\"\\n        \"],[7,\"div\"],[9],[0,\"\\n            \"],[7,\"br\"],[9],[10],[0,\"\\n            \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n                \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newName\"]],\"Update Authors Name\"]]],false],[0,\"\\n                \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"id\"]]]],[9],[0,\"Update Name\"],[10],[0,\"\\n            \"],[10],[0,\"\\n            \"],[7,\"br\"],[9],[10],[0,\"\\n            \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n                \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newBook\"]],\"Book Title\"]]],false],[0,\"\\n                \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"id\"]]]],[9],[0,\"Add Book\"],[10],[0,\"\\n            \"],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[10],[0,\"\\n\"],[10],[0,\"\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/author.hbs" } });
+});
+;define("project/templates/authors/index", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.HTMLBars.template({ "id": "iArWE9jf", "block": "{\"symbols\":[\"auth\"],\"statements\":[[7,\"div\"],[11,\"class\",\"flex pure-g\"],[9],[0,\"\\n  \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n\"],[7,\"h1\"],[11,\"class\",\"title\"],[9],[0,\" Authors \"],[10],[0,\"\\n\"],[4,\"each\",[[23,[\"model\"]]],null,{\"statements\":[[0,\"    \"],[1,[27,\"log\",[[22,1,[]]],null],false],[0,\"\\n    \"],[7,\"div\"],[11,\"class\",\"center pure-u-1-4\"],[9],[0,\"\\n        \"],[7,\"p\"],[11,\"class\",\"name\"],[9],[1,[22,1,[\"name\"]],false],[10],[0,\"\\n        \"],[4,\"link-to\",[\"authors.author\",[22,1,[\"id\"]]],null,{\"statements\":[[7,\"img\"],[11,\"class\",\"\"],[12,\"src\",[22,1,[\"picture\"]]],[9],[10]],\"parameters\":[]},null],[0,\"\\n    \"],[10],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"  \"],[7,\"br\"],[9],[10],[0,\"\\n  \"],[7,\"br\"],[9],[10],[0,\"\\n  \"],[7,\"div\"],[9],[0,\"\\n      \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n        \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newAuthor\"]],\"Enter Authors Name\"]]],false],[0,\"\\n        \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"createAuthor\"]],[9],[0,\"Add Author\"],[10],[0,\"\\n    \"],[10],[0,\"\\n  \"],[10],[0,\"\\n \"],[10],[0,\"\\n\"],[10],[0,\"\\n\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/index.hbs" } });
 });
 ;define('project/tests/mirage/mirage.lint-test', [], function () {
   'use strict';
@@ -434,7 +527,7 @@
 
   QUnit.test('mirage/config.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'mirage/config.js should pass ESLint\n\n');
+    assert.ok(false, 'mirage/config.js should pass ESLint\n\n1:25 - \'server\' is defined but never used. (no-unused-vars)');
   });
 
   QUnit.test('mirage/factories/author.js', function (assert) {
@@ -480,7 +573,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+6725d063"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+b0bb04ec"});
           }
         
 //# sourceMappingURL=project.map
