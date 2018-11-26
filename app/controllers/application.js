@@ -1,7 +1,8 @@
-import Ember from 'ember';
-import Mirage, { faker } from 'ember-cli-mirage';
+// import Ember from 'ember';
+import Controller from '@ember/controller';
+// import Mirage, { faker } from 'ember-cli-mirage';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   // actions: {
   //   createAuthor() {
   //     let newAuthor = this.get('newAuthor')

@@ -1,21 +1,30 @@
-<div class="flex pure-g">
-  <div class="center pure-u-1">
-    <div class="center pure-u-1">
-        <p class="name-lg">{{model.name}}</p>
-        <img  src={{model.picture}}>
-        <div>
-            <br>
-            <form class="pure-form">
-                {{input value=newName placeholder="Update Authors Name"}}
-                <button class="pure-button"{{action 'updateName' model.id}}>Update Name</button>
-            </form>
-            <br>
-            <form class="pure-form">
-                {{input value=newBook placeholder="Book Title"}}
-                <button class="pure-button"{{action 'updateName' model.id}}>Add Book</button>
-            </form>
+<div class="center">
+    <p class="name-lg">{{model.author.name}}</p>
+    <img  src={{model.author.picture}}>
+    <div>
+        <br>
+        <form class="pure-form">
+            {{input value=newName placeholder="Update Authors Name"}}
+            <button class="pure-button"{{action 'updateName' model.author.id}}>Update Name</button>
+        </form>
+        <br>
+        <form class="pure-form">
+            {{input value=newBook placeholder="Book Title"}}
+            <button class="pure-button"{{action 'addBook' model.author.id}}>Add Book</button>
+        </form>
+    </div>
+    <p class="name-lg margins">
+        <i><u>Books</u></i>
+    </p>
+    {{#each model.books.books as |book|}}  <!--model.authors if using RSVP -->
+        {{log book.title}}
+        {{#link-to "authors.author.books" book.id}}
+        <div class="center pure-u-1">
+            <p class="name margins">{{book.title}}</p>
         </div>
-    </div>
-    </div>
+        {{/link-to}}
+        <button class="pure-button" {{action 'deleteBook' book.id}}><i class="fa fa-trash" aria-hidden="true"></i></button>
+    {{/each}}
+
 </div>
 {{outlet}}

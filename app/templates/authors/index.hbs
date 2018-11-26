@@ -1,21 +1,25 @@
 <div class="flex pure-g">
   <div class="center pure-u-1">
 <h1 class="title"> Authors </h1>
-  {{#each model as |auth|}}
+<div>
+    <form class="pure-form">
+        {{input value=newAuthor placeholder="Enter Authors Name"}}
+        <button class="pure-button"{{action 'createAuthor'}}>Add Author</button>
+    </form>
+</div>
+  {{#each model as |auth|}}  <!--model.authors if using RSVP -->
     {{log auth}}
     <div class="center pure-u-1-4">
         <p class="name">{{auth.name}}</p>
+        <!-- <img class="" src={{auth.picture}}> -->
         {{#link-to "authors.author" auth.id}}<img class="" src={{auth.picture}}>{{/link-to}}
+        <br />
+        <button class="pure-button" {{action 'deleteAuthor' auth.id}}><i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
     </div>
   {{/each}}
   <br>
   <br>
-  <div>
-      <form class="pure-form">
-        {{input value=newAuthor placeholder="Enter Authors Name"}}
-        <button class="pure-button"{{action 'createAuthor'}}>Add Author</button>
-    </form>
-  </div>
  </div>
 </div>
 

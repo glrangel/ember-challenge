@@ -17,22 +17,32 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/application.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/application.js should pass ESLint\n\n2:8 - \'Mirage\' is defined but never used. (no-unused-vars)\n2:18 - \'faker\' is defined but never used. (no-unused-vars)\n4:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)');
+    assert.ok(true, 'controllers/application.js should pass ESLint\n\n');
   });
 
   QUnit.test('controllers/authors/author.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/author.js should pass ESLint\n\n3:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)\n6:9 - Unexpected console statement. (no-console)\n8:13 - \'author\' is assigned a value but never used. (no-unused-vars)');
+    assert.ok(true, 'controllers/authors/author.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('controllers/authors/books/index.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/authors/books/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('controllers/authors/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n2:8 - \'Mirage\' is defined but never used. (no-unused-vars)\n4:16 - Use import Controller from \'@ember/controller\'; instead of using Ember.Controller (ember/new-module-imports)');
+    assert.ok(true, 'controllers/authors/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('models/author.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/author.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('models/book.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/book.js should pass ESLint\n\n');
   });
 
   QUnit.test('resolver.js', function (assert) {
@@ -53,6 +63,11 @@ define('project/tests/app.lint-test', [], function () {
   QUnit.test('routes/authors/author.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/authors/author.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('routes/authors/books/index.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/authors/books/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('routes/authors/index.js', function (assert) {
