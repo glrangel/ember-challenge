@@ -1,0 +1,5 @@
+<p class="name">{{author.name}}</p>
+{{#link-to "authors.author" author.id}}<img class="" src={{author.picture}}>{{/link-to}}
+<br />
+<button class="pure-button" {{action 'deleteAuthor' author.id}}><i class="fa fa-trash" aria-hidden="true"></i>
+</button>

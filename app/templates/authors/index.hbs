@@ -10,13 +10,9 @@
 </div>
     {{#list-filter class="pure-form" filter=(action "filterByName") as |filteredResults|}}
     <br />
-        {{#each filteredResults as |auth|}}
+        {{#each filteredResults as |author|}}
             <div class="center pure-u-1-4">
-                <p class="name">{{auth.name}}</p>
-                {{#link-to "authors.author" auth.id}}<img class="" src={{auth.picture}}>{{/link-to}}
-                <br />
-                <button class="pure-button" {{action 'deleteAuthor' auth.id}}><i class="fa fa-trash" aria-hidden="true"></i>
-                </button>
+                {{author-object author=author}}
             </div>
         {{/each}}
     {{/list-filter}}

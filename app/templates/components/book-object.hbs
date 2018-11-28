@@ -1,0 +1,4 @@
+{{#link-to "authors.author.books" book.id class='remove'}}
+<p class="name remove">{{book.title}}</p>
+{{/link-to}}
+<button class="pure-button" {{action 'deleteBook' book.id}}><i class="fa fa-trash" aria-hidden="true"></i></button>

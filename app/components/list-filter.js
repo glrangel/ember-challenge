@@ -9,7 +9,6 @@ export default Component.extend({
     this.filter('').then((allResults) => {
       this.set('results', allResults.results);
     });
-    // this.filter('').then((results) => this.set('results', results));
   },
 
   actions: {

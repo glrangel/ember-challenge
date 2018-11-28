@@ -1,6 +1,5 @@
 <!-- <div class="center"> -->
-    <div class="center pure-u-1">
-
+<div class="center pure-u-1">
     <p class="name-lg">{{model.author.name}}</p>
     <img  src={{model.author.picture}}>
     <div>
@@ -18,14 +17,10 @@
     <p class="name-lg margins">
         <i><u>Books</u></i>
     </p>
-    {{#each model.books.books as |book|}}  <!--model.authors if using RSVP -->
+    {{#each model.books.books as |book|}}
         <div class="center pure-u-1-4">
-            {{#link-to "authors.author.books" book.id class='remove'}}
-            <p class="name remove">{{book.title}}</p>
-            {{/link-to}}
-            <button class="pure-button" {{action 'deleteBook' book.id}}><i class="fa fa-trash" aria-hidden="true"></i></button>
+            {{book-object book=book}}
         </div>
     {{/each}}
-
 </div>
 {{outlet}}
