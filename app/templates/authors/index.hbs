@@ -2,28 +2,24 @@
   <div class="center pure-u-1">
 <h1 class="title"> Authors </h1>
 <div>
-    <form class="pure-form">
-        {{input value=newAuthor placeholder="Enter Authors Name"}}
-        <button class="pure-button"{{action 'createAuthor'}}>Add Author</button>
+    <form class="pure-form" {{action 'createAuthor' on='submit'}}>
+        {{input required=true value=newAuthor placeholder="Enter Authors Name"}}
+        <button class="pure-button" >Add Author</button>
     </form>
     <br />
-    <form class="pure-form">
-        {{input value=filter placeholder="Filter By Name"}}
-        <!-- <button class="pure-button"{{action 'createAuthor'}}>Search</button> -->
-    </form>
 </div>
-    <!-- {{name-filter list=model}} -->
-  {{#each model as |auth|}}
-    {{log "auth" auth.id}}
-    <div class="center pure-u-1-4">
-        <p class="name">{{auth.name}}</p>
-        {{#link-to "authors.author" auth.id}}<img class="" src={{auth.picture}}>{{/link-to}}
-        <br />
-        <button class="pure-button" {{action 'deleteAuthor' auth.id}}><i class="fa fa-trash" aria-hidden="true"></i>
-        </button>
-    </div>
-  {{/each}}
-  <br>
-  <br>
+    {{#list-filter class="pure-form" filter=(action "filterByName") as |filteredResults|}}
+    <br />
+        {{#each filteredResults as |auth|}}
+            <div class="center pure-u-1-4">
+                <p class="name">{{auth.name}}</p>
+                {{#link-to "authors.author" auth.id}}<img class="" src={{auth.picture}}>{{/link-to}}
+                <br />
+                <button class="pure-button" {{action 'deleteAuthor' auth.id}}><i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
+        {{/each}}
+    {{/list-filter}}
+    <br><br>
  </div>
 </div>

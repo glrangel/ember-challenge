@@ -11,6 +11,7 @@ export default Controller.extend({
         let newName = this.get('newName');
         this.store.findRecord('author', id).then(function(auth) {
           auth.set('name', newName);
+          auth.save();
         });
         this.set('newName','');
     },

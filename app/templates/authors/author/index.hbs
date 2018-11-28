@@ -5,21 +5,20 @@
     <img  src={{model.author.picture}}>
     <div>
         <br>
-        <form class="pure-form">
-            {{input value=newName placeholder="Update Authors Name"}}
-            <button class="pure-button"{{action 'updateName' model.author.id}}>Update Name</button>
+        <form class="pure-form" {{action 'updateName' model.author.id on='submit'}}>
+            {{input required=true value=newName placeholder="Update Authors Name"}}
+            <button class="pure-button">Update Name</button>
         </form>
         <br>
-        <form class="pure-form">
-            {{input value=newBook placeholder="Book Title"}}
-            <button class="pure-button"{{action 'addBook' model.author.id}}>Add Book</button>
+        <form class="pure-form" {{action 'addBook' model.author.id on='submit'}}>
+            {{input required=true value=newBook placeholder="Book Title"}}
+            <button class="pure-button">Add Book</button>
         </form>
     </div>
     <p class="name-lg margins">
         <i><u>Books</u></i>
     </p>
     {{#each model.books.books as |book|}}  <!--model.authors if using RSVP -->
-        {{log book.title}}
         <div class="center pure-u-1-4">
             {{#link-to "authors.author.books" book.id class='remove'}}
             <p class="name remove">{{book.title}}</p>

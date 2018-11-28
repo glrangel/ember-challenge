@@ -30,6 +30,38 @@
 
   exports.default = App;
 });
+;define('project/components/list-filter', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Component.extend({
+    classNames: ['list-filter'],
+    value: '',
+
+    init() {
+      this._super(...arguments);
+      this.filter('').then(allResults => {
+        this.set('results', allResults.results);
+      });
+      // this.filter('').then((results) => this.set('results', results));
+    },
+
+    actions: {
+      handleFilterEntry() {
+        let filterInputValue = this.value;
+        let filterAction = this.filter;
+        filterAction(filterInputValue).then(filterResults => {
+          if (filterResults.query === this.value) {
+            this.set('results', filterResults.results);
+          }
+        });
+      }
+    }
+
+  });
+});
 ;define('project/components/welcome-page', ['exports', 'ember-welcome-page/components/welcome-page'], function (exports, _welcomePage) {
   'use strict';
 
@@ -52,24 +84,23 @@
   exports.default = Ember.Controller.extend({});
 });
 ;define('project/controllers/authors/author/books', ['exports'], function (exports) {
-    'use strict';
+  'use strict';
 
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.default = Ember.Controller.extend({
-        actions: {
-            updateName(id) {
-                console.log("wxdddd");
-                console.log(id);
-                let newTitle = this.get('newTitle');
-                this.store.findRecord('book', id).then(function (book) {
-                    book.set('title', newTitle);
-                });
-                this.set('newTitle', '');
-            }
-        }
-    });
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Controller.extend({
+    actions: {
+      updateName(id) {
+        let newTitle = this.get('newTitle');
+        this.store.findRecord('book', id).then(function (book) {
+          book.set('title', newTitle);
+          book.save();
+        });
+        this.set('newTitle', '');
+      }
+    }
+  });
 });
 ;define('project/controllers/authors/author/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
     'use strict';
@@ -84,6 +115,7 @@
                 let newName = this.get('newName');
                 this.store.findRecord('author', id).then(function (auth) {
                     auth.set('name', newName);
+                    auth.save();
                 });
                 this.set('newName', '');
             },
@@ -109,33 +141,45 @@
     });
 });
 ;define('project/controllers/authors/index', ['exports'], function (exports) {
-    'use strict';
+  'use strict';
 
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.default = Ember.Controller.extend({
-        actions: {
-            createAuthor() {
-                let newAuthor = this.get('newAuthor');
-                let newRecord = this.store.createRecord('author', {
-                    name: newAuthor,
-                    picture: faker.internet.avatar()
-                });
-                newRecord.save();
-                //create books
-                this.set('newAuthor', '');
-            },
-            deleteAuthor(id) {
-                // let auth = this.store.peekRecord('author', authId);
-                let auth = this.store.peekRecord('author', id);
-                // auth.get('books').removeObject(book);
-                auth.deleteRecord();
-                auth.save();
-                // auth.save();
-            }
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.Controller.extend({
+    actions: {
+      createAuthor() {
+
+        let newAuthor = this.get('newAuthor');
+        console.log("hey: ");
+        let newRecord = this.store.createRecord('author', {
+          name: newAuthor,
+          picture: faker.internet.avatar()
+        });
+        newRecord.save();
+        this.set('newAuthor', '');
+      },
+      deleteAuthor(id) {
+        // let auth = this.store.peekRecord('author', authId);
+        let auth = this.store.peekRecord('author', id);
+        // auth.get('books').removeObject(book);
+        auth.deleteRecord();
+        auth.save();
+        // auth.save();
+      },
+      filterByName(param) {
+        if (param !== '') {
+          return this.store.query('author', { name: param }).then(results => {
+            return { query: param, results: results };
+          });
+        } else {
+          return this.store.findAll('author').then(results => {
+            return { query: param, results: results };
+          });
         }
-    });
+      }
+    }
+  });
 });
 ;define('project/helpers/app-version', ['exports', 'project/config/environment', 'ember-cli-app-version/utils/regexp'], function (exports, _environment, _regexp) {
   'use strict';
@@ -372,11 +416,17 @@
 
     // this.urlPrefix = 'http://localhost:4200/';    // make this `http://localhost:8080`, for example, if your API is on a different server
     this.namespace = 'api'; // make this `/api`, for example, if your API is namespaced
-    this.get('/authors');
+
+    //allows for searchable authors
+    this.get('/authors', function (db, request) {
+      if (request.queryParams.name !== undefined) {
+        let filteredAuthors = db.authors.all().filter(function (i) {
+          return i.name.toLowerCase().indexOf(request.queryParams.name.toLowerCase()) !== -1;
+        });
+        return filteredAuthors;
+      } else return db.authors.all();
+    });
     this.post('/authors');
-    // this.post('/authors', (author) => {
-    //     server.create('book', { author });
-    // });
 
     this.get('/books');
     this.post('/books');
@@ -387,6 +437,7 @@
 
     this.get('/books/:id');
     this.del('/books/:id');
+    this.patch('/books/:id');
 
     // this.post('/authors', (schema, request) => {
     //   const attrs = JSON.parse(request.requestBody).data.attributes;
@@ -558,13 +609,6 @@
     });
     exports.default = Ember.Route.extend({
         model(params) {
-
-            let { author_id } = this.paramsFor('author');
-            console.log("author id: " + author_id);
-            console.log("params id: " + params.author_id);
-
-            // console.log(params.id);
-            // console.log(params.author.author_id);
             return Ember.RSVP.hash({
                 author: this.store.findRecord('author', params.author_id),
                 books: this.store.findRecord('author', params.author_id, { include: 'books' })
@@ -626,7 +670,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "IV05s4mV", "block": "{\"symbols\":[],\"statements\":[[7,\"div\"],[11,\"class\",\"center\"],[9],[0,\"\\n    \"],[7,\"u\"],[9],[7,\"p\"],[11,\"class\",\"name-lg\"],[9],[0,\"Book Info\"],[10],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Author\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"author\",\"name\"]],false],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Title\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"title\"]],false],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Publication Date\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"date\"]],false],[10],[0,\"\\n    \"],[7,\"div\"],[9],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newTitle\"]],\"Update Book Title\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"id\"]]]],[9],[0,\"Update Title\"],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n\"],[10],[0,\"\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/author/books.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "K5VBPpgB", "block": "{\"symbols\":[],\"statements\":[[7,\"div\"],[11,\"class\",\"center\"],[9],[0,\"\\n    \"],[7,\"u\"],[9],[7,\"p\"],[11,\"class\",\"name-lg\"],[9],[0,\"Book Info\"],[10],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Author\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"author\",\"name\"]],false],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Title\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"title\"]],false],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n    \"],[7,\"i\"],[11,\"class\",\"name margins\"],[9],[0,\"Publication Date\"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins-all\"],[9],[1,[23,[\"model\",\"date\"]],false],[10],[0,\"\\n    \"],[7,\"div\"],[9],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"id\"]]],[[\"on\"],[\"submit\"]]],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"required\",\"value\",\"placeholder\"],[true,[23,[\"newTitle\"]],\"Update Book Title\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[9],[0,\"Update Title\"],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n\"],[10],[0,\"\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/author/books.hbs" } });
 });
 ;define("project/templates/authors/author/index", ["exports"], function (exports) {
   "use strict";
@@ -634,7 +678,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "7Xovc6iL", "block": "{\"symbols\":[\"book\"],\"statements\":[[2,\" <div class=\\\"center\\\"> \"],[0,\"\\n    \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg\"],[9],[1,[23,[\"model\",\"author\",\"name\"]],false],[10],[0,\"\\n    \"],[7,\"img\"],[12,\"src\",[23,[\"model\",\"author\",\"picture\"]]],[9],[10],[0,\"\\n    \"],[7,\"div\"],[9],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newName\"]],\"Update Authors Name\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"author\",\"id\"]]]],[9],[0,\"Update Name\"],[10],[0,\"\\n        \"],[10],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newBook\"]],\"Book Title\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"addBook\",[23,[\"model\",\"author\",\"id\"]]]],[9],[0,\"Add Book\"],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins\"],[9],[0,\"\\n        \"],[7,\"i\"],[9],[7,\"u\"],[9],[0,\"Books\"],[10],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[4,\"each\",[[23,[\"model\",\"books\",\"books\"]]],null,{\"statements\":[[0,\"  \"],[2,\"model.authors if using RSVP \"],[0,\"\\n        \"],[1,[27,\"log\",[[22,1,[\"title\"]]],null],false],[0,\"\\n        \"],[7,\"div\"],[11,\"class\",\"center pure-u-1-4\"],[9],[0,\"\\n\"],[4,\"link-to\",[\"authors.author.books\",[22,1,[\"id\"]]],[[\"class\"],[\"remove\"]],{\"statements\":[[0,\"            \"],[7,\"p\"],[11,\"class\",\"name remove\"],[9],[1,[22,1,[\"title\"]],false],[10],[0,\"\\n\"]],\"parameters\":[]},null],[0,\"            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"deleteBook\",[22,1,[\"id\"]]]],[9],[7,\"i\"],[11,\"class\",\"fa fa-trash\"],[11,\"aria-hidden\",\"true\"],[9],[10],[10],[0,\"\\n        \"],[10],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"\\n\"],[10],[0,\"\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/author/index.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "x+G9/rvz", "block": "{\"symbols\":[\"book\"],\"statements\":[[2,\" <div class=\\\"center\\\"> \"],[0,\"\\n    \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg\"],[9],[1,[23,[\"model\",\"author\",\"name\"]],false],[10],[0,\"\\n    \"],[7,\"img\"],[12,\"src\",[23,[\"model\",\"author\",\"picture\"]]],[9],[10],[0,\"\\n    \"],[7,\"div\"],[9],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[3,\"action\",[[22,0,[]],\"updateName\",[23,[\"model\",\"author\",\"id\"]]],[[\"on\"],[\"submit\"]]],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"required\",\"value\",\"placeholder\"],[true,[23,[\"newName\"]],\"Update Authors Name\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[9],[0,\"Update Name\"],[10],[0,\"\\n        \"],[10],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[3,\"action\",[[22,0,[]],\"addBook\",[23,[\"model\",\"author\",\"id\"]]],[[\"on\"],[\"submit\"]]],[9],[0,\"\\n            \"],[1,[27,\"input\",null,[[\"required\",\"value\",\"placeholder\"],[true,[23,[\"newBook\"]],\"Book Title\"]]],false],[0,\"\\n            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[9],[0,\"Add Book\"],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[7,\"p\"],[11,\"class\",\"name-lg margins\"],[9],[0,\"\\n        \"],[7,\"i\"],[9],[7,\"u\"],[9],[0,\"Books\"],[10],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[4,\"each\",[[23,[\"model\",\"books\",\"books\"]]],null,{\"statements\":[[0,\"  \"],[2,\"model.authors if using RSVP \"],[0,\"\\n        \"],[7,\"div\"],[11,\"class\",\"center pure-u-1-4\"],[9],[0,\"\\n\"],[4,\"link-to\",[\"authors.author.books\",[22,1,[\"id\"]]],[[\"class\"],[\"remove\"]],{\"statements\":[[0,\"            \"],[7,\"p\"],[11,\"class\",\"name remove\"],[9],[1,[22,1,[\"title\"]],false],[10],[0,\"\\n\"]],\"parameters\":[]},null],[0,\"            \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"deleteBook\",[22,1,[\"id\"]]]],[9],[7,\"i\"],[11,\"class\",\"fa fa-trash\"],[11,\"aria-hidden\",\"true\"],[9],[10],[10],[0,\"\\n        \"],[10],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"\\n\"],[10],[0,\"\\n\"],[1,[21,\"outlet\"],false],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/author/index.hbs" } });
 });
 ;define("project/templates/authors/index", ["exports"], function (exports) {
   "use strict";
@@ -642,7 +686,15 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "2B70TFNL", "block": "{\"symbols\":[\"auth\"],\"statements\":[[7,\"div\"],[11,\"class\",\"flex pure-g\"],[9],[0,\"\\n  \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n\"],[7,\"h1\"],[11,\"class\",\"title\"],[9],[0,\" Authors \"],[10],[0,\"\\n\"],[7,\"div\"],[9],[0,\"\\n    \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n        \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"newAuthor\"]],\"Enter Authors Name\"]]],false],[0,\"\\n        \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"createAuthor\"]],[9],[0,\"Add Author\"],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n    \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[9],[0,\"\\n        \"],[1,[27,\"input\",null,[[\"value\",\"placeholder\"],[[23,[\"filter\"]],\"Filter By Name\"]]],false],[0,\"\\n        \"],[2,\" <button class=\\\"pure-button\\\"{{action 'createAuthor'}}>Search</button> \"],[0,\"\\n    \"],[10],[0,\"\\n\"],[10],[0,\"\\n    \"],[2,\" {{name-filter list=model}} \"],[0,\"\\n\"],[4,\"each\",[[23,[\"model\"]]],null,{\"statements\":[[0,\"    \"],[1,[27,\"log\",[\"auth\",[22,1,[\"id\"]]],null],false],[0,\"\\n    \"],[7,\"div\"],[11,\"class\",\"center pure-u-1-4\"],[9],[0,\"\\n        \"],[7,\"p\"],[11,\"class\",\"name\"],[9],[1,[22,1,[\"name\"]],false],[10],[0,\"\\n        \"],[4,\"link-to\",[\"authors.author\",[22,1,[\"id\"]]],null,{\"statements\":[[7,\"img\"],[11,\"class\",\"\"],[12,\"src\",[22,1,[\"picture\"]]],[9],[10]],\"parameters\":[]},null],[0,\"\\n        \"],[7,\"br\"],[9],[10],[0,\"\\n        \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"deleteAuthor\",[22,1,[\"id\"]]]],[9],[7,\"i\"],[11,\"class\",\"fa fa-trash\"],[11,\"aria-hidden\",\"true\"],[9],[10],[0,\"\\n        \"],[10],[0,\"\\n    \"],[10],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"  \"],[7,\"br\"],[9],[10],[0,\"\\n  \"],[7,\"br\"],[9],[10],[0,\"\\n \"],[10],[0,\"\\n\"],[10],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/index.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "92gekmqG", "block": "{\"symbols\":[\"filteredResults\",\"auth\"],\"statements\":[[7,\"div\"],[11,\"class\",\"flex pure-g\"],[9],[0,\"\\n  \"],[7,\"div\"],[11,\"class\",\"center pure-u-1\"],[9],[0,\"\\n\"],[7,\"h1\"],[11,\"class\",\"title\"],[9],[0,\" Authors \"],[10],[0,\"\\n\"],[7,\"div\"],[9],[0,\"\\n    \"],[7,\"form\"],[11,\"class\",\"pure-form\"],[3,\"action\",[[22,0,[]],\"createAuthor\"],[[\"on\"],[\"submit\"]]],[9],[0,\"\\n        \"],[1,[27,\"input\",null,[[\"required\",\"value\",\"placeholder\"],[true,[23,[\"newAuthor\"]],\"Enter Authors Name\"]]],false],[0,\"\\n        \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[9],[0,\"Add Author\"],[10],[0,\"\\n    \"],[10],[0,\"\\n    \"],[7,\"br\"],[9],[10],[0,\"\\n\"],[10],[0,\"\\n\"],[4,\"list-filter\",null,[[\"class\",\"filter\"],[\"pure-form\",[27,\"action\",[[22,0,[]],\"filterByName\"],null]]],{\"statements\":[[0,\"    \"],[7,\"br\"],[9],[10],[0,\"\\n\"],[4,\"each\",[[22,1,[]]],null,{\"statements\":[[0,\"            \"],[7,\"div\"],[11,\"class\",\"center pure-u-1-4\"],[9],[0,\"\\n                \"],[7,\"p\"],[11,\"class\",\"name\"],[9],[1,[22,2,[\"name\"]],false],[10],[0,\"\\n                \"],[4,\"link-to\",[\"authors.author\",[22,2,[\"id\"]]],null,{\"statements\":[[7,\"img\"],[11,\"class\",\"\"],[12,\"src\",[22,2,[\"picture\"]]],[9],[10]],\"parameters\":[]},null],[0,\"\\n                \"],[7,\"br\"],[9],[10],[0,\"\\n                \"],[7,\"button\"],[11,\"class\",\"pure-button\"],[3,\"action\",[[22,0,[]],\"deleteAuthor\",[22,2,[\"id\"]]]],[9],[7,\"i\"],[11,\"class\",\"fa fa-trash\"],[11,\"aria-hidden\",\"true\"],[9],[10],[0,\"\\n                \"],[10],[0,\"\\n            \"],[10],[0,\"\\n\"]],\"parameters\":[2]},null]],\"parameters\":[1]},null],[0,\"    \"],[7,\"br\"],[9],[10],[7,\"br\"],[9],[10],[0,\"\\n \"],[10],[0,\"\\n\"],[10],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/authors/index.hbs" } });
+});
+;define("project/templates/components/list-filter", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = Ember.HTMLBars.template({ "id": "8/0MWhn3", "block": "{\"symbols\":[\"&default\"],\"statements\":[[1,[27,\"input\",null,[[\"value\",\"key-up\",\"class\",\"placeholder\"],[[23,[\"value\"]],[27,\"action\",[[22,0,[]],\"handleFilterEntry\"],null],\"light\",\"Filter By Name\"]]],false],[0,\"\\n\"],[14,1,[[23,[\"results\"]]]],[0,\"\\n\"]],\"hasEval\":false}", "meta": { "moduleName": "project/templates/components/list-filter.hbs" } });
 });
 ;define('project/tests/mirage/mirage.lint-test', [], function () {
   'use strict';
@@ -707,7 +759,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+2ac322dc"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+53e7771a"});
           }
         
 //# sourceMappingURL=project.map

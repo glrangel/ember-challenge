@@ -10,9 +10,9 @@
     <p class="name-lg margins-all">{{model.date}}</p>
     <div>
         <br>
-        <form class="pure-form">
-            {{input value=newTitle placeholder="Update Book Title"}}
-            <button class="pure-button"{{action 'updateName' model.id}}>Update Title</button>
+        <form class="pure-form" {{action 'updateName' model.id on='submit'}}>
+            {{input required=true value=newTitle placeholder="Update Book Title"}}
+            <button class="pure-button">Update Title</button>
         </form>
     </div>
 </div>

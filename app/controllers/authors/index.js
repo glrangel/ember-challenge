@@ -5,13 +5,14 @@ import Controller from '@ember/controller';
 export default Controller.extend({
     actions: {
       createAuthor() {
+
         let newAuthor = this.get('newAuthor');
+        console.log("hey: ");
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
           picture: faker.internet.avatar()
         })
         newRecord.save();
-        //create books
         this.set('newAuthor','');
     },
     deleteAuthor(id) {
@@ -21,6 +22,19 @@ export default Controller.extend({
             auth.deleteRecord();
             auth.save();
             // auth.save();
+    },
+    filterByName(param) {
+        if (param !== '') {
+            return this.store
+          .query('author', { name: param }).then((results) => {
+            return { query: param, results: results };
+          });
+        } else {
+            return this.store
+          .findAll('author').then((results) => {
+            return { query: param, results: results };
+          });
         }
     }
+}
 });

@@ -15,6 +15,11 @@ define('project/tests/app.lint-test', [], function () {
     assert.ok(true, 'app.js should pass ESLint\n\n');
   });
 
+  QUnit.test('components/list-filter.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/list-filter.js should pass ESLint\n\n');
+  });
+
   QUnit.test('controllers/application.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/application.js should pass ESLint\n\n');
@@ -22,7 +27,7 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/authors/author/books.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/author/books.js should pass ESLint\n\n8:11 - Unexpected console statement. (no-console)\n9:11 - Unexpected console statement. (no-console)');
+    assert.ok(true, 'controllers/authors/author/books.js should pass ESLint\n\n');
   });
 
   QUnit.test('controllers/authors/author/index.js', function (assert) {
@@ -32,7 +37,7 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/authors/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n11:20 - \'faker\' is not defined. (no-undef)');
+    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n10:9 - Unexpected console statement. (no-console)\n13:20 - \'faker\' is not defined. (no-undef)');
   });
 
   QUnit.test('models/author.js', function (assert) {
@@ -62,7 +67,7 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('routes/authors/author.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/authors/author.js should pass ESLint\n\n9:9 - Unexpected console statement. (no-console)\n10:9 - Unexpected console statement. (no-console)');
+    assert.ok(true, 'routes/authors/author.js should pass ESLint\n\n');
   });
 
   QUnit.test('routes/authors/books.js', function (assert) {
@@ -73,6 +78,35 @@ define('project/tests/app.lint-test', [], function () {
   QUnit.test('routes/authors/index.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/authors/index.js should pass ESLint\n\n');
+  });
+});
+define('project/tests/integration/components/list-filter-test', ['qunit', 'ember-qunit', '@ember/test-helpers'], function (_qunit, _emberQunit, _testHelpers) {
+  'use strict';
+
+  (0, _qunit.module)('Integration | Component | list-filter', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template({
+        "id": "05pehUAG",
+        "block": "{\"symbols\":[],\"statements\":[[1,[21,\"list-filter\"],false]],\"hasEval\":false}",
+        "meta": {}
+      }));
+
+      assert.equal(this.element.textContent.trim(), '');
+
+      // Template block usage:
+      await (0, _testHelpers.render)(Ember.HTMLBars.template({
+        "id": "wCktFOTV",
+        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"list-filter\",null,null,{\"statements\":[[0,\"        template block text\\n\"]],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
+        "meta": {}
+      }));
+
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
   });
 });
 define('project/tests/test-helper', ['project/app', 'project/config/environment', '@ember/test-helpers', 'ember-qunit'], function (_app, _environment, _testHelpers, _emberQunit) {
@@ -86,6 +120,11 @@ define('project/tests/tests.lint-test', [], function () {
   'use strict';
 
   QUnit.module('ESLint | tests');
+
+  QUnit.test('integration/components/list-filter-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'integration/components/list-filter-test.js should pass ESLint\n\n');
+  });
 
   QUnit.test('test-helper.js', function (assert) {
     assert.expect(1);
