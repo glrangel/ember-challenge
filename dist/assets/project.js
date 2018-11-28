@@ -9,8 +9,8 @@
 		value: true
 	});
 	exports.default = _emberData.default.JSONAPIAdapter.extend({
-		host: 'http://localhost:4200/api'
-		// host: 'https://crud-authors.herokuapp.com/'
+		// host: 'http://localhost:4200/api'
+		host: 'https://crud-authors.herokuapp.com/api'
 	});
 });
 ;define('project/app', ['exports', 'project/resolver', 'ember-load-initializers', 'project/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
@@ -735,7 +735,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+f0d1e365"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+9b4cc116"});
           }
         
 //# sourceMappingURL=project.map
