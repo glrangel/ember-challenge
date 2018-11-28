@@ -8,11 +8,10 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('authors', {path: '/authors'}, function(){
-      this.route('author', {path: '/:author_id'}, function(){
-          this.route('books', {path: '/books/:book_id'});
-      });
-      // this.route('author', {path: '/:author_id'});
-      // this.route('books', {path: '/books/:book_id'});
+    this.route('author', {path: '/:author_id'}, function(){
+        this.route('books', {path: '/books/:book_id'});
+    });
+
   });
 
 });

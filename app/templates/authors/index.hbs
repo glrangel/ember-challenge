@@ -6,12 +6,17 @@
         {{input value=newAuthor placeholder="Enter Authors Name"}}
         <button class="pure-button"{{action 'createAuthor'}}>Add Author</button>
     </form>
+    <br />
+    <form class="pure-form">
+        {{input value=filter placeholder="Filter By Name"}}
+        <!-- <button class="pure-button"{{action 'createAuthor'}}>Search</button> -->
+    </form>
 </div>
-  {{#each model as |auth|}}  <!--model.authors if using RSVP -->
-    {{log auth}}
+    <!-- {{name-filter list=model}} -->
+  {{#each model as |auth|}}
+    {{log "auth" auth.id}}
     <div class="center pure-u-1-4">
         <p class="name">{{auth.name}}</p>
-        <!-- <img class="" src={{auth.picture}}> -->
         {{#link-to "authors.author" auth.id}}<img class="" src={{auth.picture}}>{{/link-to}}
         <br />
         <button class="pure-button" {{action 'deleteAuthor' auth.id}}><i class="fa fa-trash" aria-hidden="true"></i>
@@ -22,5 +27,3 @@
   <br>
  </div>
 </div>
-
-{{outlet}}

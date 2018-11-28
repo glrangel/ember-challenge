@@ -30,3 +30,9 @@ html{
 .margins{
 	margin-bottom: 0;
 }
+.margins-all{
+	margin: 0;
+}
+.remove{
+	text-decoration: none;
+}

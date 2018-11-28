@@ -1,9 +1,12 @@
-export default function() {
+export default function(server) {
 
   // this.urlPrefix = 'http://localhost:4200/';    // make this `http://localhost:8080`, for example, if your API is on a different server
   this.namespace = 'api';    // make this `/api`, for example, if your API is namespaced
   this.get('/authors');
-  this.post('/authors')
+  this.post('/authors');
+  // this.post('/authors', (author) => {
+  //     server.create('book', { author });
+  // });
 
   this.get('/books');
   this.post('/books');

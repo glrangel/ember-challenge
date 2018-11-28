@@ -20,19 +20,19 @@ define('project/tests/app.lint-test', [], function () {
     assert.ok(true, 'controllers/application.js should pass ESLint\n\n');
   });
 
-  QUnit.test('controllers/authors/author.js', function (assert) {
+  QUnit.test('controllers/authors/author/books.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/authors/author.js should pass ESLint\n\n');
+    assert.ok(false, 'controllers/authors/author/books.js should pass ESLint\n\n8:11 - Unexpected console statement. (no-console)\n9:11 - Unexpected console statement. (no-console)');
   });
 
-  QUnit.test('controllers/authors/books/index.js', function (assert) {
+  QUnit.test('controllers/authors/author/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/authors/books/index.js should pass ESLint\n\n');
+    assert.ok(true, 'controllers/authors/author/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('controllers/authors/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/authors/index.js should pass ESLint\n\n');
+    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n11:20 - \'faker\' is not defined. (no-undef)');
   });
 
   QUnit.test('models/author.js', function (assert) {
@@ -62,12 +62,12 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('routes/authors/author.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'routes/authors/author.js should pass ESLint\n\n');
+    assert.ok(false, 'routes/authors/author.js should pass ESLint\n\n9:9 - Unexpected console statement. (no-console)\n10:9 - Unexpected console statement. (no-console)');
   });
 
-  QUnit.test('routes/authors/books/index.js', function (assert) {
+  QUnit.test('routes/authors/books.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'routes/authors/books/index.js should pass ESLint\n\n');
+    assert.ok(false, 'routes/authors/books.js should pass ESLint\n\n6:9 - Unexpected console statement. (no-console)\n7:9 - Unexpected console statement. (no-console)');
   });
 
   QUnit.test('routes/authors/index.js', function (assert) {

@@ -5,6 +5,7 @@ import { faker } from 'ember-cli-mirage';
 
 
 export default Controller.extend({
+
   actions: {
     updateName(id) {
         let newName = this.get('newName');
