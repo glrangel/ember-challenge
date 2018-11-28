@@ -9,8 +9,10 @@
 		value: true
 	});
 	exports.default = _emberData.default.JSONAPIAdapter.extend({
-		// host: 'http://localhost:4200/api'
-		host: 'https://crud-authors.herokuapp.com/api'
+		//Use host 1 if hosting locally or host 2 for heroku also update mirage/config.js
+
+		// /* host 1 */ host: 'http://localhost:4200/api'
+		/* host 2*/host: 'https://crud-authors.herokuapp.com/api'
 	});
 });
 ;define('project/app', ['exports', 'project/resolver', 'ember-load-initializers', 'project/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
@@ -409,7 +411,11 @@
 
   exports.default = function () {
 
+    //Comment out line below if hosting locally and adjust
+    //app/adapters/application.js file appropiately
+    /* --- comment out if hosting locally ---*/
     this.urlPrefix = 'https://crud-authors.herokuapp.com/';
+
     this.namespace = 'api';
 
     //allows for searchable authors

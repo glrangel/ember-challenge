@@ -1,7 +1,11 @@
 export default function() {
 
-this.urlPrefix = 'https://crud-authors.herokuapp.com/'; 
-  this.namespace = 'api';
+//Comment out line below if hosting locally and adjust
+//app/adapters/application.js file appropiately
+/* --- comment out if hosting locally ---*/
+this.urlPrefix = 'https://crud-authors.herokuapp.com/';
+
+this.namespace = 'api';
 
   //allows for searchable authors
   this.get('/authors', function(db, request) {
