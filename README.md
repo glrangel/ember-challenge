@@ -1,7 +1,10 @@
 # Ember Challenge
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is a simple CRUD app that utilizes Ember Mirage API. It allows for users to create/delete authors, update author names, create/delete books that belong to authors and update the book names. The user can also filter through authors using the filter feature.
+
+## API
+
+The API supports basic get/post/patch/delete functionality. I decided to only call the API for the authors books when that individual author is clicked on. Rather than preload all the books. That's why there is a slight delay loading the authors books. I chose to do this because if this application had 1000's of authors it would congest the API requesting every book from every author at the same time.
 
 ## Prerequisites
 
