@@ -19,7 +19,10 @@
     </p>
     {{#each model.books.books as |book|}}
         <div class="center pure-u-1-4">
-            {{book-object book=book}}
+            {{#link-to "authors.author.books" book.id class='remove'}}
+            <p class="name remove">{{book.title}}</p>
+            {{/link-to}}
+            <button class="pure-button" {{action 'deleteBook' book.id}}><i class="fa fa-trash" aria-hidden="true"></i></button>
         </div>
     {{/each}}
 </div>

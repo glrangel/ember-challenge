@@ -15,21 +15,6 @@ define('project/tests/app.lint-test', [], function () {
     assert.ok(true, 'app.js should pass ESLint\n\n');
   });
 
-  QUnit.test('components/author-object.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'components/author-object.js should pass ESLint\n\n');
-  });
-
-  QUnit.test('components/book-description.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'components/book-description.js should pass ESLint\n\n');
-  });
-
-  QUnit.test('components/book-object.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'components/book-object.js should pass ESLint\n\n');
-  });
-
   QUnit.test('components/list-filter.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'components/list-filter.js should pass ESLint\n\n');
@@ -52,7 +37,7 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/authors/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n10:9 - Unexpected console statement. (no-console)\n13:20 - \'faker\' is not defined. (no-undef)');
+    assert.ok(true, 'controllers/authors/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('models/author.js', function (assert) {
@@ -87,99 +72,12 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('routes/authors/books.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/authors/books.js should pass ESLint\n\n6:9 - Unexpected console statement. (no-console)\n7:9 - Unexpected console statement. (no-console)');
+    assert.ok(true, 'routes/authors/books.js should pass ESLint\n\n');
   });
 
   QUnit.test('routes/authors/index.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/authors/index.js should pass ESLint\n\n');
-  });
-});
-define('project/tests/integration/components/author-object-test', ['qunit', 'ember-qunit', '@ember/test-helpers'], function (_qunit, _emberQunit, _testHelpers) {
-  'use strict';
-
-  (0, _qunit.module)('Integration | Component | author-object', function (hooks) {
-    (0, _emberQunit.setupRenderingTest)(hooks);
-
-    (0, _qunit.test)('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
-
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "CGV5q2DB",
-        "block": "{\"symbols\":[],\"statements\":[[1,[21,\"author-object\"],false]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), '');
-
-      // Template block usage:
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "9dQYmPbd",
-        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"author-object\",null,null,{\"statements\":[[0,\"        template block text\\n\"]],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), 'template block text');
-    });
-  });
-});
-define('project/tests/integration/components/book-description-test', ['qunit', 'ember-qunit', '@ember/test-helpers'], function (_qunit, _emberQunit, _testHelpers) {
-  'use strict';
-
-  (0, _qunit.module)('Integration | Component | book-description', function (hooks) {
-    (0, _emberQunit.setupRenderingTest)(hooks);
-
-    (0, _qunit.test)('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
-
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "VtLMldpE",
-        "block": "{\"symbols\":[],\"statements\":[[1,[21,\"book-description\"],false]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), '');
-
-      // Template block usage:
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "hcavn8mG",
-        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"book-description\",null,null,{\"statements\":[[0,\"        template block text\\n\"]],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), 'template block text');
-    });
-  });
-});
-define('project/tests/integration/components/book-object-test', ['qunit', 'ember-qunit', '@ember/test-helpers'], function (_qunit, _emberQunit, _testHelpers) {
-  'use strict';
-
-  (0, _qunit.module)('Integration | Component | book-object', function (hooks) {
-    (0, _emberQunit.setupRenderingTest)(hooks);
-
-    (0, _qunit.test)('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
-
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "714prIEV",
-        "block": "{\"symbols\":[],\"statements\":[[1,[21,\"book-object\"],false]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), '');
-
-      // Template block usage:
-      await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "RQF6bjpK",
-        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"book-object\",null,null,{\"statements\":[[0,\"        template block text\\n\"]],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
-        "meta": {}
-      }));
-
-      assert.equal(this.element.textContent.trim(), 'template block text');
-    });
   });
 });
 define('project/tests/integration/components/list-filter-test', ['qunit', 'ember-qunit', '@ember/test-helpers'], function (_qunit, _emberQunit, _testHelpers) {
@@ -202,12 +100,12 @@ define('project/tests/integration/components/list-filter-test', ['qunit', 'ember
 
       // Template block usage:
       await (0, _testHelpers.render)(Ember.HTMLBars.template({
-        "id": "wCktFOTV",
-        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"list-filter\",null,null,{\"statements\":[[0,\"        template block text\\n\"]],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
+        "id": "eSIWmAei",
+        "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"list-filter\",null,null,{\"statements\":[],\"parameters\":[]},null],[0,\"    \"]],\"hasEval\":false}",
         "meta": {}
       }));
 
-      assert.equal(this.element.textContent.trim(), 'template block text');
+      assert.equal(this.element.textContent.trim(), '');
     });
   });
 });
@@ -222,21 +120,6 @@ define('project/tests/tests.lint-test', [], function () {
   'use strict';
 
   QUnit.module('ESLint | tests');
-
-  QUnit.test('integration/components/author-object-test.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'integration/components/author-object-test.js should pass ESLint\n\n');
-  });
-
-  QUnit.test('integration/components/book-description-test.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'integration/components/book-description-test.js should pass ESLint\n\n');
-  });
-
-  QUnit.test('integration/components/book-object-test.js', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'integration/components/book-object-test.js should pass ESLint\n\n');
-  });
 
   QUnit.test('integration/components/list-filter-test.js', function (assert) {
     assert.expect(1);

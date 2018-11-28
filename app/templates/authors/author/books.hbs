@@ -1,11 +1,19 @@
 <div class="center">
-    {{book-description model=model}}
+    <u><p class="name-lg">Book Info</p></u>
+    <i class="name margins">Author</i>
+    <p class="name-lg margins-all">{{model.author.name}}</p>
+    <br />
+    <i class="name margins">Title</i>
+    <p class="name-lg margins-all">{{model.title}}</p>
+    <br />
+    <i class="name margins">Publication Date</i>
+    <p class="name-lg margins-all">{{model.date}}</p>
     <div>
-        <br>
-        <form class="pure-form" {{action 'updateName' model.id on='submit'}}>
-            {{input required=true value=newTitle placeholder="Update Book Title"}}
-            <button class="pure-button">Update Title</button>
-        </form>
+    <br>
+    <form class="pure-form" {{action 'updateName' model.id on='submit'}}>
+        {{input required=true value=newTitle placeholder="Update Book Title"}}
+        <button class="pure-button">Update Title</button>
+    </form>
     </div>
 </div>
 {{outlet}}

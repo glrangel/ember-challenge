@@ -17,10 +17,9 @@ module('Integration | Component | list-filter', function(hooks) {
     // Template block usage:
     await render(hbs`
       {{#list-filter}}
-        template block text
       {{/list-filter}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });
