@@ -742,7 +742,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+9b4cc116"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+e9f97f31"});
           }
         
 //# sourceMappingURL=project.map
