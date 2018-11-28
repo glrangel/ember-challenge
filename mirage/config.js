@@ -1,5 +1,6 @@
 export default function() {
 
+this.urlPrefix = 'https://crud-authors.herokuapp.com/'; 
   this.namespace = 'api';
 
   //allows for searchable authors
