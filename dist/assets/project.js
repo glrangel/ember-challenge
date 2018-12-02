@@ -154,7 +154,7 @@
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: _emberCliMirage.default.internet.avatar()
+          picture: _emberCliMirage.faker.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
