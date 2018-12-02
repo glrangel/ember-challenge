@@ -142,7 +142,7 @@
         }
     });
 });
-;define('project/controllers/authors/index', ['exports', 'faker'], function (exports, _faker) {
+;define('project/controllers/authors/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -154,7 +154,7 @@
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: ''
+          picture: _emberCliMirage.faker.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
@@ -326,6 +326,20 @@
   exports.default = {
     name: 'ember-data',
     initialize: _setupContainer.default
+  };
+});
+;define('project/initializers/ember-faker', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.initialize = initialize;
+  function initialize() {}
+
+  exports.default = {
+    name: 'ember-faker',
+    initialize
   };
 });
 ;define('project/initializers/export-application-global', ['exports', 'project/config/environment'], function (exports, _environment) {
@@ -742,7 +756,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+68e1ba0f"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+63af79d7"});
           }
         
 //# sourceMappingURL=project.map

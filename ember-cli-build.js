@@ -4,9 +4,9 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
-      'ember-faker': {
-        enabled: EmberApp.env === 'production'
-      }
+      // 'ember-faker': {
+      //   enabled: EmberApp.env === 'production'
+      // }
     });
 
   // Use `app.import` to add additional libraries to the generated

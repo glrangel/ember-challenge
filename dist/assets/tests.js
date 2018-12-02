@@ -37,7 +37,7 @@ define('project/tests/app.lint-test', [], function () {
 
   QUnit.test('controllers/authors/index.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/authors/index.js should pass ESLint\n\n3:8 - \'faker\' is defined but never used. (no-unused-vars)');
+    assert.ok(true, 'controllers/authors/index.js should pass ESLint\n\n');
   });
 
   QUnit.test('models/author.js', function (assert) {
