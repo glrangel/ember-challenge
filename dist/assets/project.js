@@ -142,7 +142,7 @@
         }
     });
 });
-;define('project/controllers/authors/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
+;define('project/controllers/authors/index', ['exports'], function (exports) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -153,8 +153,8 @@
       createAuthor() {
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
-          name: newAuthor,
-          picture: _emberCliMirage.faker.internet.avatar()
+          name: newAuthor
+          // picture: faker.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
