@@ -7,8 +7,8 @@ export default Controller.extend({
       createAuthor() {
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
-          name: newAuthor
-          // picture: faker.internet.avatar()
+          name: newAuthor,
+          picture: ''
         })
         newRecord.save();
         this.set('newAuthor','');
