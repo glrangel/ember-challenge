@@ -142,7 +142,7 @@
         }
     });
 });
-;define('project/controllers/authors/index', ['exports'], function (exports) {
+;define('project/controllers/authors/index', ['exports', 'faker'], function (exports, _faker) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
