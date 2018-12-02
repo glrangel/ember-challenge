@@ -11,8 +11,8 @@
 	exports.default = _emberData.default.JSONAPIAdapter.extend({
 		//Use host 1 if hosting locally or host 2 for heroku also update mirage/config.js
 
-		/* host 1 */host: 'http://localhost:4200/api'
-		// /* host 2*/	host: 'https://crud-authors.herokuapp.com/api'
+		// /* host 1 */ host: 'http://localhost:4200/api'
+		/* host 2*/host: 'https://crud-authors.herokuapp.com/api'
 	});
 });
 ;define('project/app', ['exports', 'project/resolver', 'ember-load-initializers', 'project/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
@@ -154,7 +154,7 @@
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: _emberCliMirage.faker.internet.avatar()
+          picture: _emberCliMirage.default.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
@@ -414,7 +414,7 @@
     //Comment out line below if hosting locally and adjust
     //app/adapters/application.js file appropiately
     /* --- comment out if hosting locally ---*/
-    // this.urlPrefix = 'https://crud-authors.herokuapp.com/';
+    this.urlPrefix = 'https://crud-authors.herokuapp.com/';
 
     this.namespace = 'api';
 
@@ -742,7 +742,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+e9f97f31"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+68e1ba0f"});
           }
         
 //# sourceMappingURL=project.map
