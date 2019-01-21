@@ -142,7 +142,7 @@
         }
     });
 });
-;define('project/controllers/authors/index', ['exports'], function (exports) {
+;define('project/controllers/authors/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -154,7 +154,7 @@
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: "" //faker.internet.avatar()
+          picture: _emberCliMirage.faker.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
@@ -427,6 +427,7 @@
         return filteredAuthors;
       } else return db.authors.all();
     });
+
     this.post('/authors');
 
     this.get('/books');
@@ -517,7 +518,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = _emberCliMirage.JSONAPISerializer.extend({});
+  exports.default = _emberCliMirage.JSONAPISerializer;
 });
 ;define('project/models/author', ['exports', 'ember-data'], function (exports, _emberData) {
 	'use strict';
@@ -742,7 +743,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+9ce1f6a2"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+fcb211fb"});
           }
         
 //# sourceMappingURL=project.map
