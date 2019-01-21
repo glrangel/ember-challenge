@@ -328,20 +328,6 @@
     initialize: _setupContainer.default
   };
 });
-;define('project/initializers/ember-faker', ['exports'], function (exports) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.initialize = initialize;
-  function initialize() {}
-
-  exports.default = {
-    name: 'ember-faker',
-    initialize
-  };
-});
 ;define('project/initializers/export-application-global', ['exports', 'project/config/environment'], function (exports, _environment) {
   'use strict';
 
@@ -756,7 +742,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+63af79d7"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+5d37e3c6"});
           }
         
 //# sourceMappingURL=project.map
