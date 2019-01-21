@@ -1,6 +1,6 @@
 // import Ember from 'ember';
 import Controller from '@ember/controller';
-import {faker} from 'ember-cli-mirage';
+// import {faker} from 'ember-cli-mirage';
 
 export default Controller.extend({
     actions: {
@@ -8,7 +8,7 @@ export default Controller.extend({
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: faker.internet.avatar()
+          picture: ""//faker.internet.avatar()
         })
         newRecord.save();
         this.set('newAuthor','');

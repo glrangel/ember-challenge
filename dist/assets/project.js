@@ -142,7 +142,7 @@
         }
     });
 });
-;define('project/controllers/authors/index', ['exports', 'ember-cli-mirage'], function (exports, _emberCliMirage) {
+;define('project/controllers/authors/index', ['exports'], function (exports) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -154,7 +154,7 @@
         let newAuthor = this.get('newAuthor');
         let newRecord = this.store.createRecord('author', {
           name: newAuthor,
-          picture: _emberCliMirage.faker.internet.avatar()
+          picture: "" //faker.internet.avatar()
         });
         newRecord.save();
         this.set('newAuthor', '');
@@ -414,7 +414,7 @@
     //Comment out line below if hosting locally and adjust
     //app/adapters/application.js file appropiately
     /* --- comment out if hosting locally ---*/
-    this.urlPrefix = 'https://crud-authors.herokuapp.com/';
+    this.urlPrefix = 'https://crud-authors.herokuapp.com';
 
     this.namespace = 'api';
 
@@ -742,7 +742,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+5d37e3c6"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+9ce1f6a2"});
           }
         
 //# sourceMappingURL=project.map
