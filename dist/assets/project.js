@@ -743,7 +743,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("project/app")["default"].create({"name":"project","version":"0.0.0+fcb211fb"});
+            require("project/app")["default"].create({"name":"project","version":"0.0.0+8816d39e"});
           }
         
 //# sourceMappingURL=project.map

@@ -18,7 +18,7 @@ this.namespace = 'api';
     else
       return db.authors.all();
   });
-  
+
   this.post('/authors');
 
 
